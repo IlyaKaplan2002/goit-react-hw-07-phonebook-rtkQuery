@@ -1,16 +1,17 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { contactsSelectors, contactsActions } from 'redux/contacts';
+import { changeFilter } from 'redux/filter/filterActions';
+import { getFilter } from 'redux/filter/filterSelectors';
 import { v4 as uuid } from 'uuid';
 import FilterStyled from './Filter.styled';
 
 const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(contactsSelectors.getFilter);
+  const filter = useSelector(getFilter);
 
   const onChange = ({ target }) => {
     const { value } = target;
-    dispatch(contactsActions.changeFilter(value));
+    dispatch(changeFilter(value));
   };
 
   const filterId = uuid();

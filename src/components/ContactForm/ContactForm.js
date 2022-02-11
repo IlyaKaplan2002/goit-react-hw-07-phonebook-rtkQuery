@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import ContactFormStyled from './ContactForm.styled';
-import { useDispatch } from 'react-redux';
-import { contactsOperations } from 'redux/contacts';
+import {
+  useAddContactMutation,
+  useGetContactsQuery,
+} from 'redux/contacts/contactsSlice';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-
-  const dispatch = useDispatch();
+  const { data: contacts } = useGetContactsQuery();
+  const [addContact] = useAddContactMutation();
 
   const nameId = uuid();
   const numberId = uuid();
@@ -33,7 +35,12 @@ const ContactForm = () => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    dispatch(contactsOperations.addContacts({ name, phone: number }));
+    if (contacts.filter(item => item.name === name).length > 0) {
+      alert(`${name} is already in contacts`);
+    } else {
+      addContact({ name, phone: number });
+    }
+
     e.target.reset();
     setName('');
     setNumber('');
